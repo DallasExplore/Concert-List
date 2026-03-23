@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dallas Concerts 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘Inter’, sans-serif;
+background: #0a0a0f;
+color: #fff;
+min-height: 100vh;
+padding: 24px 16px;
+}
+
+header {
+text-align: center;
+margin-bottom: 32px;
+}
+
+header h1 {
+font-size: 2rem;
+font-weight: 700;
+background: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+header p {
+color: #888;
+margin-top: 6px;
+font-size: 0.9rem;
+letter-spacing: 0.05em;
+}
+
+.filters {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
+justify-content: center;
+margin-bottom: 28px;
+}
+
+.filter-btn {
+padding: 6px 16px;
+border-radius: 999px;
+border: 1px solid #333;
+background: transparent;
+color: #aaa;
+font-size: 0.8rem;
+cursor: pointer;
+transition: all 0.2s;
+font-family: ‘Inter’, sans-serif;
+}
+
+.filter-btn:hover, .filter-btn.active {
+background: linear-gradient(135deg, #f97316, #ec4899);
+border-color: transparent;
+color: #fff;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 16px;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.card {
+background: #13131a;
+border: 1px solid #222;
+border-radius: 16px;
+padding: 20px;
+position: relative;
+overflow: hidden;
+transition: transform 0.2s, border-color 0.2s;
+display: flex;
+flex-direction: column;
+}
+
+.card:hover {
+transform: translateY(-3px);
+border-color: #444;
+}
+
+.card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+}
+
+.card.march::before { background: linear-gradient(90deg, #f97316, #fb923c); }
+.card.april::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
+.card.may::before   { background: linear-gradient(90deg, #a855f7, #c084fc); }
+.card.june::before  { background: linear-gradient(90deg, #06b6d4, #67e8f9); }
+.card.july::before  { background: linear-gradient(90deg, #22c55e, #86efac); }
+.card.august::before{ background: linear-gradient(90deg, #eab308, #fde047); }
+
+.month-badge {
+display: inline-block;
+font-size: 0.65rem;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+padding: 3px 10px;
+border-radius: 999px;
+margin-bottom: 12px;
+}
+
+.march  .month-badge { background: #f9731620; color: #fb923c; }
+.april  .month-badge { background: #ec489920; color: #f472b6; }
+.may    .month-badge { background: #a855f720; color: #c084fc; }
+.june   .month-badge { background: #06b6d420; color: #67e8f9; }
+.july   .month-badge { background: #22c55e20; color: #86efac; }
+.august .month-badge { background: #eab30820; color: #fde047; }
+
+.card-date {
+font-size: 0.78rem;
+color: #666;
+margin-bottom: 4px;
+font-weight: 500;
+}
+
+.card-artist {
+font-size: 1.15rem;
+font-weight: 700;
+color: #fff;
+margin-bottom: 10px;
+line-height: 1.3;
+}
+
+.card-venue {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 0.82rem;
+color: #777;
+margin-bottom: 14px;
+flex: 1;
+}
+
+.card-venue svg {
+flex-shrink: 0;
+opacity: 0.6;
+}
+
+.ticket-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+padding: 8px 16px;
+border-radius: 8px;
+font-size: 0.78rem;
+font-weight: 600;
+text-decoration: none;
+transition: opacity 0.2s, transform 0.15s;
+cursor: pointer;
+border: none;
+width: 100%;
+margin-top: auto;
+text-align: center;
+}
+
+.ticket-btn:hover {
+opacity: 0.85;
+transform: translateY(-1px);
+}
+
+.march  .ticket-btn { background: linear-gradient(135deg, #f97316, #fb923c); color: #fff; }
+.april  .ticket-btn { background: linear-gradient(135deg, #ec4899, #f472b6); color: #fff; }
+.may    .ticket-btn { background: linear-gradient(135deg, #a855f7, #c084fc); color: #fff; }
+.june   .ticket-btn { background: linear-gradient(135deg, #06b6d4, #67e8f9); color: #0a0a0f; }
+.july   .ticket-btn { background: linear-gradient(135deg, #22c55e, #86efac); color: #0a0a0f; }
+.august .ticket-btn { background: linear-gradient(135deg, #eab308, #fde047); color: #0a0a0f; }
+
+.ticket-btn.tbd {
+background: #1e1e2a !important;
+color: #555 !important;
+border: 1px solid #2a2a3a;
+cursor: default;
+}
+.ticket-btn.tbd:hover { opacity: 1 !important; transform: none !important; }
+
+.card.hidden { display: none; }
+
+.count {
+text-align: center;
+color: #555;
+font-size: 0.8rem;
+margin-bottom: 16px;
+}
+
+.follow-note {
+text-align: center;
+margin-top: 36px;
+padding: 16px;
+border: 1px solid #222;
+border-radius: 12px;
+max-width: 400px;
+margin-left: auto;
+margin-right: auto;
+color: #666;
+font-size: 0.8rem;
+}
+
+.follow-note span { color: #ec4899; font-weight: 600; }
+</style>
+
+</head>
+<body>
+
+<header>
+  <h1>🎶 Dallas Desi Events 2026</h1>
+  <p>UPCOMING CONCERTS &amp; SHOWS</p>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all', this)">All Events</button>
+  <button class="filter-btn" onclick="filter('march', this)">March</button>
+  <button class="filter-btn" onclick="filter('april', this)">April</button>
+  <button class="filter-btn" onclick="filter('may', this)">May</button>
+  <button class="filter-btn" onclick="filter('june', this)">June</button>
+  <button class="filter-btn" onclick="filter('july', this)">July</button>
+  <button class="filter-btn" onclick="filter('august', this)">August</button>
+</div>
+
+<p class="count" id="count">17 events</p>
+
+<div class="grid" id="grid">
+
+  <div class="card march" data-month="march">
+    <span class="month-badge">March</span>
+    <div class="card-date">March 26, 2026</div>
+    <div class="card-artist">Bismil Ki Mehfil</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Prism Las Colinas</div>
+    <a class="ticket-btn" href="https://www.eventbrite.com/e/bismil-ki-mehfil-main-hoon-sufi-live-in-dallas-tickets-1968879086348" target="_blank">🎟️ Get Tickets · Eventbrite</a>
+  </div>
+
+  <div class="card march" data-month="march">
+    <span class="month-badge">March</span>
+    <div class="card-date">March 29, 2026</div>
+    <div class="card-artist">Amit Tandon</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Eisemann Center</div>
+    <a class="ticket-btn" href="https://www.eisemanncenter.com/event/?i=11525" target="_blank">🎟️ Get Tickets · Eisemann Center</a>
+  </div>
+
+  <div class="card april" data-month="april">
+    <span class="month-badge">April</span>
+    <div class="card-date">April 11, 2026</div>
+    <div class="card-artist">Shankar–Ehsaan–Loy</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Choctaw Grand Theater</div>
+    <a class="ticket-btn" href="https://www.ticketmaster.com/kal-ho-na-ho-shankar-ehsaan-durant-oklahoma-04-11-2026/event/0C0064338712463D" target="_blank">🎟️ Get Tickets · Ticketmaster</a>
+  </div>
+
+  <div class="card april" data-month="april">
+    <span class="month-badge">April</span>
+    <div class="card-date">April 12, 2026</div>
+    <div class="card-artist">Asim Azhar</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Sambuca 360</div>
+    <a class="ticket-btn" href="https://www.ticketmaster.com/asim-azhar-tickets/artist/3162352" target="_blank">🎟️ Get Tickets · Ticketmaster</a>
+  </div>
+
+  <div class="card april" data-month="april">
+    <span class="month-badge">April</span>
+    <div class="card-date">April 9, 2026</div>
+    <div class="card-artist">Vir Das: Hey Stranger</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Majestic Theatre Dallas</div>
+    <a class="ticket-btn" href="https://www.stubhub.com/hey-stranger-dallas-tickets-4-9-2026/event/159988114/" target="_blank">🎟️ Get Tickets · StubHub</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 2, 2026</div>
+    <div class="card-artist">Sumukhi Suresh</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Unity of Dallas</div>
+    <a class="ticket-btn" href="https://theticketworld.com/events/dallas-hoemonal-sumukhi-suresh-standup-comedy-live-2026-tickets-05-02-2026-dallas-tx-757" target="_blank">🎟️ Get Tickets · TheTicketWorld</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 8, 2026</div>
+    <div class="card-artist">SANAM</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>The Bomb Factory</div>
+    <a class="ticket-btn" href="https://www.axs.com/events/1328078/sanam-tickets" target="_blank">🎟️ Get Tickets · AXS</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 9, 2026</div>
+    <div class="card-artist">Anuv Jain</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>The Studio at The Bomb Factory</div>
+    <a class="ticket-btn" href="https://www.axs.com/events/1302215/anuv-jain-tickets" target="_blank">🎟️ Get Tickets · AXS</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 9, 2026</div>
+    <div class="card-artist">Nitin Mukesh</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Plano Event Center</div>
+    <a class="ticket-btn" href="https://events.sulekha.com/nitin-mukesh-live-in-concert_event-in_plano-tx_398755" target="_blank">🎟️ Get Tickets · Sulekha</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 16, 2026</div>
+    <div class="card-artist">Diljit Dosanjh</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>American Airlines Center</div>
+    <a class="ticket-btn" href="https://www.axs.com/events/1322274/diljit-dosanjh-tickets" target="_blank">🎟️ Get Tickets · AXS</a>
+  </div>
+
+  <div class="card may" data-month="may">
+    <span class="month-badge">May</span>
+    <div class="card-date">May 31, 2026</div>
+    <div class="card-artist">Arjun Rampal</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Club VIVO</div>
+    <a class="ticket-btn" href="https://www.eventbrite.com/e/arjun-rampal-rampage-tour-live-celebrity-dj-night-in-dallas-club-vivo-tickets-1984707107385" target="_blank">🎟️ Get Tickets · Eventbrite</a>
+  </div>
+
+  <div class="card june" data-month="june">
+    <span class="month-badge">June</span>
+    <div class="card-date">June 6, 2026</div>
+    <div class="card-artist">Ram Miriyala</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Frisco Flyers Club</div>
+    <a class="ticket-btn" href="https://events.sulekha.com/ram-miriyala_tickets_artist_1198" target="_blank">🎟️ Get Tickets · Sulekha</a>
+  </div>
+
+  <div class="card june" data-month="june">
+    <span class="month-badge">June</span>
+    <div class="card-date">June 14, 2026</div>
+    <div class="card-artist">Javed Ali</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Plano Event Center</div>
+    <a class="ticket-btn" href="https://www.eventbrite.com/e/javed-ali-tickets-1983323784830" target="_blank">🎟️ Get Tickets · Eventbrite</a>
+  </div>
+
+  <div class="card june" data-month="june">
+    <span class="month-badge">June</span>
+    <div class="card-date">June 14, 2026</div>
+    <div class="card-artist">Atul Khatri</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Coppell Arts Center</div>
+    <a class="ticket-btn" href="https://www.theticketworld.com/events/dallas-well-trained-by-atul-khatri-standup-comedy-live-2026-tickets-06-14-2026-coppell-tx-780" target="_blank">🎟️ Get Tickets · TheTicketWorld</a>
+  </div>
+
+  <div class="card july" data-month="july">
+    <span class="month-badge">July</span>
+    <div class="card-date">July 12, 2026</div>
+    <div class="card-artist">Vishal-Shekhar</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Curtis Culwell Center</div>
+    <a class="ticket-btn" href="https://kashpatelproductions.com/event/vishal-sheykhar-the-superhit-tour/" target="_blank">🎟️ Get Tickets · KashPatelProductions</a>
+  </div>
+
+  <div class="card july" data-month="july">
+    <span class="month-badge">July</span>
+    <div class="card-date">July 24, 2026</div>
+    <div class="card-artist">Nawazuddin Siddiqui</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Plano Event Center</div>
+    <a class="ticket-btn" href="https://www.eventbrite.com/e/nawazuddin-siddiqui-comedy-thriller-naqaab-tickets-1982539446854" target="_blank">🎟️ Get Tickets · Eventbrite</a>
+  </div>
+
+  <div class="card august" data-month="august">
+    <span class="month-badge">August</span>
+    <div class="card-date">August 15, 2026</div>
+    <div class="card-artist">Ammy Virk</div>
+    <div class="card-venue"><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.24 0 1 2.24 1 5c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="#888"/></svg>Credit Union of Texas Event Center</div>
+    <a class="ticket-btn" href="https://www.cutxeventcenter.com/events" target="_blank">🎟️ Get Tickets · CUTX Event Center</a>
+  </div>
+
+</div>
+
+<div class="follow-note">
+  Follow <span>@dallas.explore</span> for giveaways &amp; more events 🔥
+</div>
+
+<script>
+  function filter(month, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('.card');
+    let visible = 0;
+    cards.forEach(card => {
+      if (month === 'all' || card.dataset.month === month) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    document.getElementById('count').textContent = visible + (visible === 1 ? ' event' : ' events');
+  }
+</script>
+
+</body>
+</html>
